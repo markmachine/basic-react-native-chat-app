@@ -22,15 +22,16 @@ const SwipeButton = ({text, icon, width, backgroundColor, ...rest}) => (
   <TouchableOpacity
     style={[style.swipeButton, {width, backgroundColor}]}
     {...rest}>
-    <TabBarIcon size={26} style={style.icon} type={'mat'} name={'video'} />
+    {icon &&  <TabBarIcon size={26} style={style.icon} type={'mat'} name={icon} />}
     <Text style={style.buttonLabel}>{text}</Text>
   </TouchableOpacity>
 );
 
 SwipeButton.propTypes = {
   text: PropTypes.string.isRequired,
-  icon: PropTypes.string.isRequired,
+  icon: PropTypes.string,
   width: PropTypes.number.isRequired,
 };
 
 export default SwipeButton;
+``

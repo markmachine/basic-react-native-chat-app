@@ -9,10 +9,12 @@ import {
   TouchableOpacity,
   View,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import { WebBrowser } from 'expo';
 import Divider from '../components/Divider';
+import TextInput from '../components/TextInput';
 import Item from '../components/Item';
 
 const styles = StyleSheet.create({
@@ -28,7 +30,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   contentContainer: {
-    paddingTop: 30,
+    paddingTop: 5,
   },
   welcomeContainer: {
     alignItems: 'center',
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
     }),
     alignItems: 'flex-start',
     backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
+    paddingVertical: 4,
   },
   tabBarInfoText: {
     fontSize: 17,
@@ -108,7 +110,9 @@ const styles = StyleSheet.create({
 class ChatMainScreen extends React.Component {
   state = {
     refreshing: false,
+    id: 5,
     onEndReachedCalledDuringMomentum: true,
+    convos: this.props.conversations,
   };
 
   onEndReachedHandler = async () => {
@@ -120,12 +124,45 @@ class ChatMainScreen extends React.Component {
     this.setState({onEndReachedCalledDuringMomentum: true});
   };
 
-  // renderItem = ({item}) => (
-  //   <View key={item.id} style={{flex:1, flexDirection: 'row'}}>
-  //     <Text>{item.name} : </Text>
-  //     <Text>{item.text}</Text>
-  //   </View>
-  // );
+  handleUpdateMessage = (message = '') => {
+    console.log('message', message);
+    const d = new Date();
+    let {id} = this.state;
+    id += 1;
+    let output = {
+      id: id + '',
+      name: 'me',
+      incoming: false,
+      text: message,
+      timestamp: d.toISOString(),
+    };
+    if (message.indexOf('@you') >-1 ) {
+      output.name = 'you';
+      output.incoming = true;
+    }
+    if (message.indexOf('@msg') >-1 ) {
+      Alert.alert(
+        "Current message value:",
+        message,
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+        ],
+      );
+    }
+
+    let {convos} = this.state;
+    convos.push(output);
+
+    this.setState({
+      convos,
+      id: convos.length,
+    })
+
+
+  }
 
   renderItem = ({item}) => {
     console.log('item', item);
@@ -182,7 +219,7 @@ class ChatMainScreen extends React.Component {
           refreshing={refreshing}
           renderItem={this.renderItem}
           ListFooterComponent={this.renderFooter}
-          ItemSeparatorComponent={() => <Divider style={{marginLeft: 68}} />}
+          ItemSeparatorComponent={() => <View style={{marginLeft: 68}} />}
         />
       </View>
     )
@@ -192,17 +229,11 @@ class ChatMainScreen extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-            {this.getSwipeList()}
-          </View>
+          {this.getSwipeList()}
         </ScrollView>
 
         <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>Send a Chat</Text>
+          <TextInput updateMessage={this.handleUpdateMessage} />
         </View>
       </View>
     );
@@ -236,39 +267,10 @@ ChatMainScreen.defaultProps = {
     {
       id: '001',
       name: 'me',
+      incoming: false,
       text: 'this is some chat text',
       timestamp: '2018-10-18T19:10:36.062Z',
     },
-    {
-      id: '002',
-      name: 'me',
-      text: 'more chat this is some chat text this is some chat text',
-      timestamp: '2018-10-18T19:10:36.062Z',
-    },
-    {
-      id: '003',
-      name: 'you',
-      text: 'another response block',
-      timestamp: '2018-10-18T19:10:36.062Z',
-    },
-    {
-      id: '004',
-      name: 'me',
-      text: 'random text goes this is some chat text here to test with',
-      timestamp: '2018-10-18T19:10:36.062Z',
-    },
-    {
-      id: '005',
-      name: 'you',
-      text: 'some chat this is some chat text to test with',
-      timestamp: '2018-10-18T19:10:36.062Z',
-    },
-    {
-      id: '006',
-      name: 'me',
-      text: 'this is some chat text this is some chat text this is some chat text',
-      timestamp: '2018-10-18T19:10:36.062Z',
-    }
   ],
   isFetching: false,
 };

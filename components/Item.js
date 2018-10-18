@@ -10,49 +10,46 @@ const WHITE = 'white';
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     padding: 5,
   },
   rowFront: {
     flex: 1,
-    padding: 15,
+    padding: 2,
     flexDirection: 'row',
-    minHeight: 90,
     backgroundColor: 'white',
-  },
-  couplePhotoWrapper: {
-    marginRight: 16,
-    position: 'relative',
-    top: -4,
-  },
-  unreadWrapper: {
-    position: 'absolute',
-    top: 12,
-    left: -14,
   },
   name: {
     fontWeight: '600',
     fontSize: 16,
     color: 'black',
   },
-  nameRead: {
-    fontSize: 16,
-    color: 'black',
-  },
   date: {
     flex: 1,
     textAlign: 'right',
-    fontSize: 12,
-    alignSelf: 'flex-end',
+    fontSize: 18,
+    alignSelf: 'center',
     color: 'gray',
-    marginBottom: 7,
+    paddingTop: 2,
   },
   snippet: {
-    color: 'gray',
+    color: 'black',
+    fontSize: 18,
     flex: 1,
     justifyContent: 'flex-start',
   },
+  borderBlock: {
+    borderLeftWidth: 5,
+    borderLeftColor: 'rgb(226, 108, 108)',
+    paddingLeft: 5,
+    backgroundColor: 'rgb(229, 229, 229)',
+    borderRadius: 4,
+    padding: 5,
+  }
 });
+
+const RED = 'rgb(73, 171, 244)';
+const BLUE = 'rgb(226, 108, 108)';
 
 class Item extends Component {
   constructor() {
@@ -80,6 +77,7 @@ class Item extends Component {
       name,
       text,
       timestamp,
+      incoming,
     } = conversation;
 
     const formattedDate = moment(timestamp).calendar(
@@ -105,101 +103,34 @@ class Item extends Component {
 
     const DEBG = true;
 
-    const returnHeighLight = () => {
-      return (
-        <TouchableHighlight
-          style={[style.rowFront, {width: Dimensions.get('window').width}]}
-          onPress={this.onPress}
-          underlayColor={WHITE}
-          activeOpacity={0.2}
-          testID={id}>
-          <View style={style.container}>
-
-            <View style={{flex: 1}}>
-              <View style={{flexDirection: 'row'}}>
-                <Text
-                  onLayout={this.grabClientNameWidth}
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                  style={[
-                    style.name,
-                    {maxWidth: widthAdjust, marginBottom: 4},
-                  ]}>
-                  {name}:
-                </Text>
-                <Text style={style.date}>{formattedDate}</Text>
-              </View>
-              <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                <Text
-                  style={style.snippet}
-                  numberOfLines={2}
-                  ellipsizeMode="tail"
-                  html>
-                  {text}
-                </Text>
-
-              </View>
+    return (
+        <View style={{flex: 1, width: Dimensions.get('window').width}}>
+          <SwipeRow
+            ref={element => {
+              this.swipeRow = element;
+            }}
+            leftOpenValue={swipeActionWidth * 1}
+            disableLeftSwipe>
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
+              <SwipeButton
+                width={swipeActionWidth}
+                onPress={() => {
+                  console.log('button push')
+                  if (this.closeRow) this.closeRow();
+                }}
+                text="Save"
+                backgroundColor="rgb(178, 178, 178)"
+                id="book-button"
+              />
             </View>
-          </View>
-        </TouchableHighlight>
-      )
-    }
 
-    if (DEBG) {
-      return (
-        <SwipeRow
-          ref={element => {
-            this.swipeRow = element;
-          }}
-          leftOpenValue={swipeActionWidth * 1}
-          disableLeftSwipe>
-          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-            <SwipeButton
-              width={swipeActionWidth}
-              onPress={() => {
-                console.log('button push')
-                if (this.closeRow) this.closeRow();
-              }}
-              text="Unbook"
-              backgroundColor="rgb(96, 110, 120)"
-              icon="book-filled"
-              id="book-button"
-            />
-          </View>
-          {returnHeighLight()}
-        </SwipeRow>
-      )
-    } else {
-      return (
-        <SwipeRow
-          ref={element => {
-            this.swipeRow = element;
-          }}
-          rightOpenValue={swipeActions.length * swipeActionWidth * -1}
-          disableRightSwipe>
-          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-            <SwipeButton
-              {...swipeActionWidth}
-              onPress={() => {
-                console.log('button push')
-                if (this.closeRow) this.closeRow();
-              }}
-              text="Unbook"
-              backgroundColor="rgb(96, 110, 120)"
-              icon="book-filled"
-              id="book-button"
-            />
-          </View>
-
-          <TouchableHighlight
-            style={style.rowFront}
-            onPress={this.onPress}
-            underlayColor={WHITE}
-            activeOpacity={0.2}
-            testID={id}>
-            <View style={style.container}>
-
-              <View style={{flex: 1}}>
+            <TouchableHighlight
+              style={style.rowFront}
+              onPress={this.onPress}
+              underlayColor={WHITE}
+              activeOpacity={0.2}
+              testID={id}>
+              <View style={style.container}>
                 <View style={{flexDirection: 'row'}}>
                   <Text
                     onLayout={this.grabClientNameWidth}
@@ -208,29 +139,32 @@ class Item extends Component {
                     style={[
                       style.name,
                       {maxWidth: widthAdjust, marginBottom: 4},
+                      {color: incoming ? RED : BLUE}
                     ]}>
-                    {name}:
+                    {name.toUpperCase()}
                   </Text>
+                </View>
+                <View style={[{flex: 1, flexDirection: 'column'}, style.borderBlock, {borderLeftColor: incoming ? RED : BLUE}]}>
+
+                  <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                    <Text
+                      style={style.snippet}
+                      numberOfLines={6}
+                      ellipsizeMode="tail"
+                      html>
+                      {text}
+                    </Text>
+                  </View>
+
+                </View>
+                <View style={{flex: 1, alignItems: 'center'}}>
                   <Text style={style.date}>{formattedDate}</Text>
                 </View>
-                <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                  <Text
-                    style={style.snippet}
-                    numberOfLines={2}
-                    ellipsizeMode="tail"
-                    html>
-                    {text}
-                  </Text>
-
-                </View>
               </View>
-            </View>
-          </TouchableHighlight>
-        </SwipeRow>
-      );
-    }
-
-
+            </TouchableHighlight>
+          </SwipeRow>
+        </View>
+      )
 
   }
 }
@@ -245,6 +179,7 @@ Item.propTypes = {
     name: PropTypes.string,
     text: PropTypes.string,
     timestamp: PropTypes.string,
+    incoming: PropTypes.bool,
   }).isRequired,
   onPress: PropTypes.func,
 };

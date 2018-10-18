@@ -6,11 +6,11 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import ChatScreen from '../screens/ChatScreen';
+import BlankScreen from '../screens/BlankScreen';
 import ChatMainScreen from '../screens/ChatMainScreen';
 
 const HomeStack = createStackNavigator({
-  Home: HomeScreen,
+  Home: ChatMainScreen,
 });
 
 HomeStack.navigationOptions = {
@@ -24,7 +24,7 @@ HomeStack.navigationOptions = {
 };
 
 const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+  Links: BlankScreen,
 });
 
 LinksStack.navigationOptions = {
@@ -39,7 +39,7 @@ LinksStack.navigationOptions = {
 };
 
 const ChatStack = createStackNavigator({
-  Links: ChatScreen,
+  Links: BlankScreen,
 });
 
 ChatStack.navigationOptions = {
@@ -70,7 +70,7 @@ ChatMainStack.navigationOptions = {
 };
 
 const DupeStack = createStackNavigator({
-  Settings: SettingsScreen,
+  Settings: BlankScreen,
 });
 
 DupeStack.navigationOptions = {

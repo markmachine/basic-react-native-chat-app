@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View, Text} from 'react-native';
 
-export default class ChatScreen extends React.Component {
+export default class BlankScreen extends React.Component {
   static navigationOptions = {
     title: 'Chat',
   };
@@ -10,7 +10,7 @@ export default class ChatScreen extends React.Component {
     return (
       <ScrollView style={styles.container}>
         <View>
-          <Text>Some text for chat screen</Text>
+          <Text>blank</Text>
         </View>
       </ScrollView>
     );
