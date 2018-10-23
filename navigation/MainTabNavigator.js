@@ -1,11 +1,12 @@
 import React from 'react';
-import { Platform, View } from 'react-native';
+import { Platform, View, Alert } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import ModalScreen from '../screens/ModalScreen';
 import BlankScreen from '../screens/BlankScreen';
 import ChatMainScreen from '../screens/ChatMainScreen';
 
@@ -23,11 +24,11 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const LinksStack = createStackNavigator({
-  Links: BlankScreen,
+const CardStack = createStackNavigator({
+  Links: ModalScreen,
 });
 
-LinksStack.navigationOptions = {
+CardStack.navigationOptions = {
   tabBarLabel: <View/>,
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -36,6 +37,12 @@ LinksStack.navigationOptions = {
       name={'video'}
     />
   ),
+    mode: 'modal',
+    headerMode: 'none',
+    cardStyle:{
+        backgroundColor:"transparent",
+        opacity:0.02
+    }
 };
 
 const ChatStack = createStackNavigator({
@@ -82,12 +89,24 @@ DupeStack.navigationOptions = {
       name={'smile-o'}
     />
   ),
+  tabBarOnPress: () => {
+      Alert.alert(
+          "Current message value:",
+          'message',
+          [
+              {
+                  text: 'Cancel',
+                  style: 'cancel',
+              },
+          ],
+      )
+  },
 };
 
 export default createBottomTabNavigator({
   HomeStack,
   ChatStack,
   ChatMainStack,
-  LinksStack,
+  CardStack,
   DupeStack,
 });

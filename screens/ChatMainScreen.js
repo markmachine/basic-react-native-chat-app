@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import {SwipeListView} from 'react-native-swipe-list-view';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import { WebBrowser } from 'expo';
 import Divider from '../components/Divider';
 import TextInput from '../components/TextInput';
@@ -121,13 +121,13 @@ class ChatMainScreen extends React.Component {
     }
 
     // await this.getConversations({cursor: this.props.cursor});
-    this.setState({onEndReachedCalledDuringMomentum: true});
+    this.setState({ onEndReachedCalledDuringMomentum: true });
   };
 
   handleUpdateMessage = (message = '') => {
     console.log('message', message);
     const d = new Date();
-    let {id} = this.state;
+    let { id } = this.state;
     id += 1;
     let output = {
       id: id + '',
@@ -136,39 +136,39 @@ class ChatMainScreen extends React.Component {
       text: message,
       timestamp: d.toISOString(),
     };
-    if (message.indexOf('@you') >-1 ) {
+    if (message.indexOf('@you') > -1) {
       output.name = 'you';
       output.incoming = true;
     }
-    if (message.indexOf('@msg') >-1 ) {
-      Alert.alert(
-        "Current message value:",
-        message,
-        [
-          {
-            text: 'Cancel',
-            style: 'cancel',
-          },
-        ],
-      );
+    if (message.indexOf('@msg') > -1) {
+      Alert.alert('Current message value:', message, [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ]);
     }
 
-    let {convos} = this.state;
+    let { convos } = this.state;
     convos.push(output);
 
     this.setState({
       convos,
       id: convos.length,
-    })
+    });
+  };
 
-
-  }
-
-  renderItem = ({item}) => {
+  renderItem = ({ item }) => {
     console.log('item', item);
     return (
-      <Item key={item.id + 'ggg'} conversation={item} onPress={() => { console.log('press item')}} />
-    )
+      <Item
+        key={item.id + 'ggg'}
+        conversation={item}
+        onPress={() => {
+          console.log('press item');
+        }}
+      />
+    );
   };
 
   onRefresh = async () => {
@@ -184,7 +184,7 @@ class ChatMainScreen extends React.Component {
   };
 
   onMomentumScrollBegin = () => {
-    this.setState({onEndReachedCalledDuringMomentum: false});
+    this.setState({ onEndReachedCalledDuringMomentum: false });
   };
 
   renderFooter = () => {
@@ -194,7 +194,8 @@ class ChatMainScreen extends React.Component {
       <View
         style={{
           paddingVertical: 20,
-        }}>
+        }}
+      >
         <ActivityIndicator animating size="large" />
       </View>
     );
@@ -203,10 +204,10 @@ class ChatMainScreen extends React.Component {
   keyExtractor = item => item.id;
 
   getSwipeList = () => {
-    const {refreshing} = this.state;
-    const {conversations} = this.props;
+    const { refreshing } = this.state;
+    const { conversations } = this.props;
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <SwipeListView
           useFlatList
           style={styles.container}
@@ -219,16 +220,19 @@ class ChatMainScreen extends React.Component {
           refreshing={refreshing}
           renderItem={this.renderItem}
           ListFooterComponent={this.renderFooter}
-          ItemSeparatorComponent={() => <View style={{marginLeft: 68}} />}
+          ItemSeparatorComponent={() => <View style={{ marginLeft: 68 }} />}
         />
       </View>
-    )
-  }
+    );
+  };
 
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={styles.contentContainer}
+        >
           {this.getSwipeList()}
         </ScrollView>
 
@@ -241,14 +245,14 @@ class ChatMainScreen extends React.Component {
 
   _handleHelpPress = () => {
     WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
+      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes',
     );
   };
 }
 
 ChatMainScreen.navigationOptions = {
-  headerRight: <View/>,
-  headerLeft: <View/>,
+  headerRight: <View />,
+  headerLeft: <View />,
   headerTitle: 'User Name',
   headerTitleStyle: {
     fontSize: 25,
