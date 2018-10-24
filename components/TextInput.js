@@ -1,6 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, TextInput, StyleSheet, TouchableOpacity, Text, Alert} from 'react-native';
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  Alert,
+} from 'react-native';
 
 const ICON_GRAY = '#cccccc';
 const ICON_BLUE = '#3ea9da';
@@ -67,17 +74,14 @@ class InputContainer extends Component {
     this.props.updateMessage('');
   }
 
-  updateMessage = (message) => {
+  updateMessage = message => {
     this.setState({
       message,
     });
-  }
+  };
 
   render() {
-    const {
-      message,
-      inputRef,
-    } = this.props;
+    const {message, inputRef} = this.props;
 
     return (
       <View style={style.container}>
@@ -137,4 +141,4 @@ InputContainer.propTypes = {
   updateMessage: PropTypes.func,
 };
 
-export default InputContainer
+export default InputContainer;

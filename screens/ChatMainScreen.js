@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  KeyboardAvoidingView,
   View,
   ActivityIndicator,
   Alert,
@@ -21,6 +22,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  listContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
   },
   developmentModeText: {
     marginBottom: 20,
@@ -129,8 +134,8 @@ class ChatMainScreen extends React.Component {
     const d = new Date();
     let { id } = this.state;
     id += 1;
-    let output = {
-      id: id + '',
+    const output = {
+      id: `${id}`,
       name: 'me',
       incoming: false,
       text: message,
@@ -149,7 +154,7 @@ class ChatMainScreen extends React.Component {
       ]);
     }
 
-    let { convos } = this.state;
+    const { convos } = this.state;
     convos.push(output);
 
     this.setState({
@@ -162,7 +167,7 @@ class ChatMainScreen extends React.Component {
     console.log('item', item);
     return (
       <Item
-        key={item.id + 'ggg'}
+        key={`${item.id}ggg`}
         conversation={item}
         onPress={() => {
           console.log('press item');
@@ -228,18 +233,23 @@ class ChatMainScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}
-        >
-          {this.getSwipeList()}
-        </ScrollView>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+        <View style={[styles.container, { alignItems: 'flex-end' }]}>
+          <ScrollView
+            contentContainerStyle={{
+              flexGrow: 1,
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
+          >
+            {this.getSwipeList()}
+          </ScrollView>
 
-        <View style={styles.tabBarInfoContainer}>
-          <TextInput updateMessage={this.handleUpdateMessage} />
+          <View style={styles.tabBarInfoContainer}>
+            <TextInput updateMessage={this.handleUpdateMessage} />
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 
